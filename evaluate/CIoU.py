@@ -25,7 +25,10 @@ def calc_IoU(predicted_coordinate, true_coordinate):
         x_right = min(t_max_x, p_max_x)
 
         overlap_area = (y_bottom - y_up) * (x_right - x_left)
-        return overlap_area
+        iou = \
+            overlap_area/\
+            (predicted_coordinate[2] * predicted_coordinate[3] + true_coordinate[2] * true_coordinate[3] - overlap_area)
+        return iou
     else:
         return None
     pass
