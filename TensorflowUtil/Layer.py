@@ -70,12 +70,14 @@ def Activate_Layer(
          :param method:
          :return:
          """
-         assert method in ['LeakReLU'], Util.CError('method is not supported')
-         if method == 'LeakReLu':
+         assert method in ['LeakReLU', 'ReLU'], Util.CError('method is not supported')
+         if method == 'LeakReLU':
                   activate = keras.layers.LeakyReLU(
                            alpha=0.1,
                            name=name + 'LeakReLU'
                   )(input)
+         elif method == 'ReLU':
+             activate = keras.layers.ReL
 
          else:
                   Util.CError('method is not supported!')
