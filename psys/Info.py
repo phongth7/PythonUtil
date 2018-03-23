@@ -30,10 +30,19 @@ def CLayerInfo(
 ):
          assert type(input).__name__ == 'Tensor', CError('input is not a tensor')
          assert type(output).__name__ == 'Tensor', CError('output is not a tensor')
-         CKeyInfo(name + str(input.get_shape().as_list()) + str(output.get_shape().as_list()))
+         CKeyInfo('LayerInfo:' + name + str(input.get_shape().as_list()) + str(output.get_shape().as_list()))
          pass
 
 
+def AddToCollectionInfo(collection_name, value):
+    """
+    该信息输出添加value到colection的信息''
+    :param collection_name: string
+    :param value: tf.Tensor/tf.Variable/tf.Operation
+    :return: 
+    """
+    print('AddToCollection: add \033[1:32:40m %s \033[mto \033[1:32:40m%s\033[m' % (collection_name, value.name()))
+    pass
 
 
 BNEPS = 0.1
