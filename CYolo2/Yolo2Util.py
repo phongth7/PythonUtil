@@ -160,7 +160,7 @@ class Yolo2Util:
         return True
         pass
 
-    def label_data_to_label(self, coordinate_data, classes_data, pre_coordinate):
+    def generate_label(self, coordinate_data, classes_data, pre_coordinate):
         """
         预测了单张图像，可含有多个obj，建议不要有多个obj都在同一cell之中
         :param coordinate_data:真值坐标数据， shape=[obj_num, 4], [[y, x, h, w], ...], list
@@ -200,5 +200,21 @@ class Yolo2Util:
             argv_dict[i]['pre_truth_IoU'] = pre_truth_IoU
             argv_dict[i]['class'] = classes_data
         Label = self._argv_to_label(argv_list=argv_dict)
+        return Label
         pass
+
+    # 未完成
+    def _get_pre_fitted_coordinate(self, coordinate_data, pre_coordinate_tensor):
+        """
+        对网络的输出Tensor进行提取，后的符合label_data_to_label的pre_coordinate
+        :param pre_coordinate: 
+        :return: 
+        """
+        indexes_y, indexes_x = np.array(coordinate_data) % self.Scalar
+        pass
+
+    # 未完成
+    def generate_label_from_net_output(self, coordinate_data, classes_data, pre_coordinate_tensor):
+        pre_coordinate = self._get_pre_fitted_coordinate(coordinate_data, pre_coordinate_tensor)
+        return self.generate_label(coordinate_data, classes_data, pre_coordinate)
     pass
