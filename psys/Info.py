@@ -3,13 +3,13 @@
 def CError(
         input=''
 ):
-         print('\033[4:31:40%s\033[m' % input)
+         print('\033[4:31:40m%s\033[m' % input)
          pass
 
 def CKeyInfo(
         input=''
 ):
-         print('\033[1:32:40%s\033[m' % input)
+         print('\033[1:32:40m%s\033[m' % input)
          pass
 
 def CGlobalExit(
