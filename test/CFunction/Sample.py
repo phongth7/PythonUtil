@@ -25,6 +25,11 @@ def test_n_devide():
     assert len(result) == 5, pinf.CError('error in n_devide, get len is not 5 : %d' % len(result))
     assert (False not in [len(i) == 3 for i in result]) is True, \
         pinf.CError('error in n_devide , get item is not 2 : %s' % [len(i) == 3 for i in result])
+    a = list(range(0, 12))
+    result = CS.n_devide(a, 5, [0])
+    assert len(result) == 5, pinf.CError('error in n_devide, get len is not 5 : %d' % len(result))
+    assert (False not in [len(i) == 3 for i in result]) is True, \
+        pinf.CError('error in n_devide , get item is not 2 : %s' % [len(i) == 3 for i in result])
     return True
 
 def test_n_devide_return_target_data():

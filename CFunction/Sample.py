@@ -36,7 +36,7 @@ def n_devide(input_list, part, except_list=[]):
     target_list = list(range(0, len(input_list)))
     [target_list.remove(i) for i in except_list]
     sample_amount = math.ceil(len(target_list) / part)
-    residue_amount = sample_amount * part - len(input_list)
+    residue_amount = sample_amount * part - len(target_list)
     gather = list()
     for i in range(0, part - 1):
         sample = random.sample(target_list, sample_amount)
