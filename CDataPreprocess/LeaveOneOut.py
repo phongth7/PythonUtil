@@ -5,6 +5,7 @@ import json
 import sys
 
 import CFunction.Sample as CFS
+import psys.Info as pinf
 
 class LeaveOneOut:
     def __init__(self):
@@ -12,6 +13,7 @@ class LeaveOneOut:
         self.File = list()
         pass
 
+    # tested
     def csv_features_seperated(
             self,
             file_list_full_path,
@@ -19,7 +21,7 @@ class LeaveOneOut:
             unique_identification,
             out_put_file_path,
             type='speed',
-            ignore_range=[]):
+            ignore_indexes=[]):
         """
         针对样本的特征存储在多个文件中，但是这多个文件有对应的唯一标志，比如a特征存在a文件，b特征存在b文件，但是对于K样本，
         在两个文件中都有对应的第m列标志k在相同，同时对于其他样本又不同
@@ -30,8 +32,19 @@ class LeaveOneOut:
         :param rate:留一比率 , float
         :param type:主要考虑到，可能总的文件比较大，同时读取会爆内存，提供两种选择方式，
         一种是速度导向，吃内存"speed"，一种是内存导向，损速度"memory"
+        :param ignore_indexes:针对csv文件需要忽略行的索引
         :return:
         """
+        pinf.CKeyInfo(
+            'all file path: %s\n'
+            'sample rate: %f\n'
+            'unique identification: %d\n'
+            'output file path: %s\n'
+            'ignore indexes: %s' %
+            (file_list_full_path, rate,
+             unique_identification,
+             out_put_file_path,
+             ignore_indexes))
         if type == 'speed':
             info = dict()
             key_info = dict()
@@ -40,19 +53,23 @@ class LeaveOneOut:
                 reader = csv.reader(open(i, 'r'))
                 # 取标识列信息，存到字典key_info中，该文件的绝对路径作为键值
                 key_info[i] = [row[unique_identification] for row in reader]
-            assert self._check_same_length(key_info) is True, 'not all csv file has the same number of data'
+            assert self._check_same_length(key_info) is True, \
+                pinf.CError('not all csv file has the same number of data')
             # part_num次留一法，每个留一法验证集互斥
+            index = CFS.n_devide(
+                key_info[file_list_full_path[0]],
+                part=part_num,
+                except_list=ignore_indexes)
             for i in range(0, part_num):
-                index = CFS.sample_except(
-                    key_info[unique_identification[0]],
-                    sample_amount=int(rate * len(key_info[unique_identification[0]])),
-                    except_list=ignore_range)
                 info[i] = dict()
-                info[i][file_list_full_path] = index
+                info[i][file_list_full_path[0]] = index[i]
                 for j in file_list_full_path[1: ]:
-                    l = [key_info[j].index(key_info[file_list_full_path[j]][k]) for k in index]
+                    l = [key_info[j].index(key_info[file_list_full_path[0]][k]) for k in index[i]]
                     info[i][j] = l
                     pass
+                pass
+            info['ignore_indexes'] = ignore_indexes
+            # info['sample_amount'] =
         elif type == 'memory':
             print('this kind method is not complete!')
             sys.exit()
@@ -63,22 +80,18 @@ class LeaveOneOut:
             pass
 
         fs = open(out_put_file_path, 'w')
-        js = json.dumps(info)
-        fs.write(info)
+        js = json.dumps(info, indent=4)
+        fs.write(js)
         fs.close()
         pass
 
-    def csv_reader(self):
-
+    def csv_reader(self, config_file, ):
+        f = open(config_file, 'r')
+        inf = json.load(f)
+        # for
         pass
 
-    def _remove_ignore_element(self):
-        """
-        对csv.reader读取出来的
-        :return:
-        """
-        pass
-
+    # tested
     def _check_same_length(self, dict_input):
         """
         比较字典中，每个的长度相同，要求：字典只是一级字典，且内容为列表
@@ -89,10 +102,10 @@ class LeaveOneOut:
         keys = list(dict_input.keys())
         for i in keys:
             try:
-                assert type(dict_input[i]).__str__ == 'list', 'content is not all list'
+                assert type(dict_input[i]).__name__ == 'list', 'content is not all list'
             except AssertionError:
                 return False
-        len_init = len(dict_input[keys])
+        len_init = len(dict_input[keys[0]])
         for i in keys:
             try:
                 assert len_init == len(dict_input[i]), 'not all the same length'
@@ -100,16 +113,3 @@ class LeaveOneOut:
                 return False
         return True
 
-
-    def _random_select(self, list_input, rate):
-        """
-        以rate概率随机选择列表中的成员，删除选中的成员，返回选择到的成员的索引
-        :param list_input:输入的list
-        :param rate:概率。
-        :return:
-        """
-        x = range(0, len(list))
-        for i in x:
-            del list_input[i]
-        return random.sample(x, int(len(x) * rate))
-        pass
