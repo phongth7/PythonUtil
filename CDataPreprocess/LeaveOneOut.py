@@ -11,6 +11,7 @@ class LeaveOneOut:
     def __init__(self):
         self.Type = str()
         self.File = list()
+        self.CsvFeaturesSeperated = 'csv_features_seperated'
         pass
 
     # tested
@@ -45,8 +46,10 @@ class LeaveOneOut:
              unique_identification,
              out_put_file_path,
              ignore_indexes))
+        info = dict()
+        info['config_file_format'] = self.CsvFeaturesSeperated
+        info['ignore_indexes'] = ignore_indexes
         if type == 'speed':
-            info = dict()
             key_info = dict()
             part_num = round(1 / rate)
             for i in file_list_full_path:
@@ -55,6 +58,7 @@ class LeaveOneOut:
                 key_info[i] = [row[unique_identification] for row in reader]
             assert self._check_same_length(key_info) is True, \
                 pinf.CError('not all csv file has the same number of data')
+            info['sample_amount'] = len(key_info[file_list_full_path[0]])
             # part_num次留一法，每个留一法验证集互斥
             index = CFS.n_devide(
                 key_info[file_list_full_path[0]],
@@ -68,8 +72,6 @@ class LeaveOneOut:
                     info[i][j] = l
                     pass
                 pass
-            info['ignore_indexes'] = ignore_indexes
-            # info['sample_amount'] =
         elif type == 'memory':
             print('this kind method is not complete!')
             sys.exit()
@@ -85,7 +87,7 @@ class LeaveOneOut:
         fs.close()
         pass
 
-    def csv_reader(self, config_file, ):
+    def csv_reader_features_seperated(self, config_file, ):
         f = open(config_file, 'r')
         inf = json.load(f)
         # for
