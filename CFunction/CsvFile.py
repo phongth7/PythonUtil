@@ -55,3 +55,41 @@ def count_csv_file_row(csv_file, model=CountModelDefault):
                 pass
             return i
     pass
+
+# tested
+def check_no_empty_between_two_significative_data(csv_file):
+    """
+    判断csv文件中不存[]在两个有意义的数据行之中
+    :param csv_file: csv 文件路径
+    :return: 
+    """
+    significative_begin = False
+    has_none = False
+    indexes = 0
+    with open(csv_file, 'r') as fp:
+        indexes += 1
+        reader = csv.reader(fp)
+        for i in reader:
+            if significative_begin is False:
+                if i != []:
+                    significative_begin = True
+                else:
+                    pass
+                pass
+            if has_none is False:
+                if (i == []) and (significative_begin is True):
+                    has_none = True
+                else:
+                    pass
+            if (has_none is True) and (significative_begin is True):
+                if i != []:
+                    pinf.CKeyInfo('in raw %d data is unsatisfactory' % indexes)
+                    return False
+                else:
+                    pass
+                pass
+            pass
+        return True
+
+
+
