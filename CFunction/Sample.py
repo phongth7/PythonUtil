@@ -33,6 +33,8 @@ def n_devide(input_list, part, except_list=[]):
     """
     assert float(len(input_list) - len(except_list)) / part >= 1.0, \
         pinf.CError('len of input_list : %d seperate part : %d, cannot be possible' % (len(input_list  ), part))
+    assert (False not in [i <= len(input_list) for i in except_list]) is True, \
+        pinf.CError('except list: %s contain element which not in input_list' % except_list)
     target_list = list(range(0, len(input_list)))
     [target_list.remove(i) for i in except_list]
     sample_amount = math.ceil(len(target_list) / part)
