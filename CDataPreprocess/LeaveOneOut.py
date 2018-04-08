@@ -87,12 +87,20 @@ class LeaveOneOut:
         fs.write(js)
         fs.close()
         pass
-
-    def csv_reader_features_seperated(self, config_file, ):
+    #   tested
+    def csv_reader_features_seperated(self, config_file):
         f = open(config_file, 'r')
-        # inf = json.load(f)
-        # all = range(0, inf['sample_amount'])
-
+        inf = json.load(f)
+        assert inf['config_file_format'] == self.CsvFeaturesSeperated, \
+            pinf.CError('config file is not %s format' % self.CsvFeaturesSeperated)
+        all = range(0, inf['sample_amount'])
+        indexes = dict()
+        indexes['file_queue'] = list(inf['0'].keys())
+        for i in range(0, inf['k-part']):
+            indexes[i] = dict()
+            indexes[i]['eval'] = [inf[str(i)][j] for j in indexes['file_queue']]
+            indexes[i]['train'] = [inf[str(i)][j] for j in indexes['file_queue']]
+        return indexes
         pass
 
     # tested
