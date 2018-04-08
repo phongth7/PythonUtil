@@ -10,6 +10,13 @@ def test_csv_features_seperated():
         unique_identification=0,
         out_put_file_path='./data/test_csv_features_seperated.json',
         ignore_indexes=[0])
+    a.csv_features_seperated(
+        ['./data/test_LeaveOneOut.csv'],
+        rate=0.3,
+        unique_identification=0,
+        out_put_file_path='./data/test_csv_features_seperated_only_1.json',
+        ignore_indexes=[0]
+    )
     pass
 
 def test_csv_reader_features_seperated():
