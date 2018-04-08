@@ -103,3 +103,4 @@ ENV/
 # test generate data file
 test/CDataPreprocess/data/test_csv_features_seperated.json
 test/CDataPreprocess/data/test_csv_features_seperated_read_inf.json
+test/CFunction/Data/CsvFile-test_count_csv_file_row.csv
