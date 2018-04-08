@@ -83,10 +83,10 @@ if __name__ == '__main__':
     pinf.CKeyInfo('-------------------testing check_no_empty_between_two_significative_data---------------------')
     return_inf = test_check_no_empty_between_two_significative_data()
     if return_inf[0] is False:
-        pinf.CError('FAILED: test_check_no_empty_between_two_significative_data in negative successed')
+        pinf.CError('OK: test_check_no_empty_between_two_significative_data in negative successed')
     else:
-        pinf.CKeyInfo('OK: test_check_no_empty_between_two_significative_data in negative failed')
+        pinf.CKeyInfo('FAILED: test_check_no_empty_between_two_significative_data in negative failed')
     if return_inf[1] is True:
-        pinf.CError('FAILED: test_check_no_empty_between_two_significative_data in positive successed')
+        pinf.CError('OK: test_check_no_empty_between_two_significative_data in positive successed')
     else:
-        pinf.CKeyInfo('OK: test_check_no_empty_between_two_significative_data in positive failed')
+        pinf.CKeyInfo('FAILED: test_check_no_empty_between_two_significative_data in positive failed')
