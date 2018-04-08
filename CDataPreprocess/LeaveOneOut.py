@@ -47,11 +47,12 @@ class LeaveOneOut:
              out_put_file_path,
              ignore_indexes))
         info = dict()
+        part_num = round(1 / rate)
+        info['k-part'] = part_num
         info['config_file_format'] = self.CsvFeaturesSeperated
         info['ignore_indexes'] = ignore_indexes
         if type == 'speed':
             key_info = dict()
-            part_num = round(1 / rate)
             for i in file_list_full_path:
                 reader = csv.reader(open(i, 'r'))
                 # 取标识列信息，存到字典key_info中，该文件的绝对路径作为键值
@@ -89,8 +90,9 @@ class LeaveOneOut:
 
     def csv_reader_features_seperated(self, config_file, ):
         f = open(config_file, 'r')
-        inf = json.load(f)
-        # for
+        # inf = json.load(f)
+        # all = range(0, inf['sample_amount'])
+
         pass
 
     # tested
