@@ -105,3 +105,4 @@ test/CDataPreprocess/data/test_csv_features_seperated.json
 test/CDataPreprocess/data/test_csv_features_seperated_read_inf.json
 test/CFunction/Data/CsvFile-test_count_csv_file_row.csv
 test/CDataPreprocess/data/test_csv_features_seperated_only_1.json
+test/CFunction/Data/CsvFile-check_no_empty_between_two_significative_data*
