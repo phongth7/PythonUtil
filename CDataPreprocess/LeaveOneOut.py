@@ -6,12 +6,14 @@ import sys
 
 import CFunction.Sample as CFS
 import psys.Info as pinf
+import CFunction.CsvFile as Ccsv
 
 class LeaveOneOut:
     def __init__(self):
         self.Type = str()
         self.File = list()
         self.CsvFeaturesSeperated = 'csv_features_seperated'
+        self.CsvItemSeperated = 'csv_item_seperated'
         pass
 
     # tested
@@ -124,4 +126,52 @@ class LeaveOneOut:
             except AssertionError:
                 return False
         return True
+
+    def csv_item_seperated(
+            self,
+            file_list_full_path,
+            rate,
+            out_put_file_path,
+            ignore_indexes=[]):
+        """
+        针对使用csv存储大量数据，总数据被分为几个文件，每个文件存储一定量的数据集，本程序要求每个数据文件中不能
+        不能再两个数据文件中穿插空数据行，但可以在两端最后又空行
+        :param file_list_full_path: 文件列表[]
+        :param rate: 留一比率,float
+        :param out_put_file_path: 信息输出文件路径， str
+        :param ignore_indexes: 无效行，每个文件需要有自己的无效行[[], [], ...]
+        :return: 
+        """
+        info = dict()
+        info['k-part'] = round(1 / rate)
+        info['config_file_format'] = self.CsvItemSeperated
+        info['ignore_indexes'] = ignore_indexes
+        info['source_file_queue'] = file_list_full_path
+        info['source_file_data_amount'] = dict()
+        pinf.CKeyInfo(
+            'all file path: %s\n'
+            'sample rate: %f\n'
+            'output file path: %s\n'
+            'ignore indexes: %s' %
+            (file_list_full_path, rate,
+             out_put_file_path,
+             ignore_indexes))
+        assert False not in [Ccsv.check_no_empty_between_two_significative_data(i) for i in file_list_full_path]
+        for i in file_list_full_path:
+            info['source_file_data_amount'][i] = Ccsv.count_csv_file_row(i)
+        total_amount = sum([info['source_file_data_amount'][i] for i in file_list_full_path])
+        ignore_list = list()
+        begin = 0
+        for i in range(0, len(file_list_full_path)):
+            append_list = [j + begin for j in ignore_indexes[i]]
+            ignore_list += append_list
+            begin += info['source_file_data_amount'][file_list_full_path[i]]
+        gather = CFS.n_devide(list(range(0, total_amount)), info['k-part'], ignore_list)
+        for i in range(0, info['k-part']):
+            info[i] = gather[i]
+        fs = open(out_put_file_path, 'w')
+        js = json.dumps(info, indent=4)
+        fs.write(js)
+        fs.close()
+        pass
 
